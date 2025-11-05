@@ -64,7 +64,11 @@ df = pd.DataFrame({
 # Plot
 plt.style.use('seaborn-v0_8-darkgrid')
 fig, axs = plt.subplots(3, 2, figsize=(12, 10))
-fig.suptitle("Time Variation of Orbital Elements — Kosmos 2475 (NORAD 37869)", fontsize=14, fontweight="bold")
+fig.suptitle(
+    "Time Variation of Orbital Elements — Kosmos 2475 (NORAD 37869)",
+    fontsize=30,        # Bigger title font
+    fontweight="bold"
+)
 
 axs[0, 0].plot(df["Epoch"], df["Inclination (deg)"], label="Inclination")
 axs[0, 0].set_ylabel("Inclination [°]")
