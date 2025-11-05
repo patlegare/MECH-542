@@ -34,7 +34,7 @@ for i in range(0, len(lines), 2):
         epoch_dt = datetime(year, 1, 1) + timedelta(days=day_of_year - 1 + frac_day)
         epochs.append(epoch_dt)
 
-        # Orbital elements from line 2 
+        # Orbital elements from line 2
         incl.append(float(line2[8:16]))
         raan.append(float(line2[17:25]))
         ecc.append(float("0." + line2[26:33].strip()))
@@ -46,7 +46,7 @@ for i in range(0, len(lines), 2):
         print("Skipping malformed TLE pair:", e)
         continue
 
-# Quick sanity print
+#Quick print
 print("\nFirst 5 parsed epochs:")
 for t in epochs[:5]:
     print(t)
@@ -61,12 +61,12 @@ df = pd.DataFrame({
     "MeanMotion (rev/day)": mean_motion,
 })
 
-# Plot
+#Plot
 plt.style.use('seaborn-v0_8-darkgrid')
 fig, axs = plt.subplots(3, 2, figsize=(12, 10))
 fig.suptitle(
     "Time Variation of Orbital Elements — Kosmos 2475 (NORAD 37869)",
-    fontsize=30,        # Bigger title font
+    fontsize=30,
     fontweight="bold"
 )
 
