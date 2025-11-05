@@ -4,8 +4,7 @@ import matplotlib.pyplot as plt
 from datetime import datetime, timedelta
 import re
 
-# ---------- Read and parse TLE file ----------
-TLE_FILE = "sat000037869.txt"   # ensure this filename is correct and in the same folder
+TLE_FILE = "sat000037869.txt"  
 
 epochs, incl, raan, ecc, argp, mean_anom, mean_motion = [], [], [], [], [], [], []
 
@@ -17,32 +16,25 @@ for i in range(0, len(lines), 2):
     try:
         line1 = lines[i].rstrip("\n")
         line2 = lines[i + 1].rstrip("\n")
-
-        # Robust epoch extraction (works regardless of spacing)
-        # Example in your file: ... 25143.57154119 ...
         m = re.search(r"\s(\d{5}\.\d+)", line1)
         if not m:
             print(f"Epoch not found in: {line1}")
             continue
-        epoch_field = m.group(1)              # e.g., "25143.57154119"
-
-        # Parse TLE epoch: YYDDD.fff... where YY is last two digits of year, DDD is day-of-year
-        epoch_raw = float(epoch_field)        # e.g., 25143.57154119
+        epoch_field = m.group(1)             
+        epoch_raw = float(epoch_field) # e.g., 25143.57154119
         integer_part = epoch_field.split('.')[0]  # e.g., "25143"
         year_two_digits = int(integer_part[:2])   # e.g., 25
-        year = 2000 + year_two_digits          # e.g., 2025 (assumes 2000-2099; adjust if needed for 1900s)
+        year = 2000 + year_two_digits  #good for 2025
 
         # Extract day-of-year + fractional day
-        effective_epoch = epoch_raw - (year_two_digits * 1000)  # e.g., 25143.57154119 - 25000 = 143.57154119
-        day_of_year = int(effective_epoch)     # e.g., 143
-        frac_day = effective_epoch - day_of_year  # e.g., 0.57154119
+        effective_epoch = epoch_raw - (year_two_digits * 1000)
+        day_of_year = int(effective_epoch)
+        frac_day = effective_epoch - day_of_year
 
         epoch_dt = datetime(year, 1, 1) + timedelta(days=day_of_year - 1 + frac_day)
         epochs.append(epoch_dt)
 
-        # Orbital elements from line 2 (official TLE column widths)
-        # positions: [8:16]=inc, [17:25]=RAAN, [26:33]=ecc (no decimal), [34:42]=argp,
-        # [43:51]=mean anomaly, [52:63]=mean motion
+        # Orbital elements from line 2 
         incl.append(float(line2[8:16]))
         raan.append(float(line2[17:25]))
         ecc.append(float("0." + line2[26:33].strip()))
@@ -59,7 +51,6 @@ print("\nFirst 5 parsed epochs:")
 for t in epochs[:5]:
     print(t)
 
-# Build DataFrame
 df = pd.DataFrame({
     "Epoch": epochs,
     "Inclination (deg)": incl,
